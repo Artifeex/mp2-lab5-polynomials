@@ -100,3 +100,74 @@ TEST(monom_test, can_create_monom_with_zero_pow)
 	EXPECT_EQ(m, Monom(str));
 }
 
+TEST(monom_test, can_create_monom_with_negative_coef)
+{
+	string str = "-3z1xy2";
+
+	Monom m(-3, 121);
+
+	EXPECT_EQ(m, Monom(str));
+}
+
+TEST(monom_test, can_add_monoms)
+{
+	string str1 = "3x5y4z3";
+	string str2 = "5x5y4z3";
+	string resultStr = "8x5y4z3";
+
+	Monom m1(str1);
+	Monom m2(str2);
+	Monom result(resultStr);
+
+	EXPECT_EQ(m1 + m2, result);
+}
+
+TEST(monom_test, cant_add_monoms_with_different_pow)
+{
+	string str1 = "3x5y2z3";
+	string str2 = "5x5y4z3";
+	Monom m1(str1);
+	Monom m2(str2);
+
+	ASSERT_ANY_THROW(m1 + m2);
+}
+
+TEST(monom_test, can_subtract_monoms)
+{
+	string str1 = "3x5y4z3";
+	string str2 = "5x5y4z3";
+	string resultStr = "-2x5y4z3";
+
+	Monom m1(str1);
+	Monom m2(str2);
+	Monom result(resultStr);
+
+	EXPECT_EQ(m1 - m2, result);
+}
+
+TEST(monom_test, can_multiply_monoms)
+{
+	string str1 = "3x2y4z3";
+	string str2 = "-5x5y4z";
+	string resultStr = "-15x7y8z4";
+
+	Monom m1(str1);
+	Monom m2(str2);
+	Monom result(resultStr);
+
+	EXPECT_EQ(m1 * m2, result);
+}
+
+TEST(monom_test, throws_when_mulitly_gives_big_pow)
+{
+	string str1 = "3x2y4z3";
+	string str2 = "-5x3y6z4";
+	Monom m1(str1);
+	Monom m2(str2);
+
+	ASSERT_ANY_THROW(m1 * m2);
+}
+
+
+
+

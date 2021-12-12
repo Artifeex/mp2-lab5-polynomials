@@ -8,7 +8,6 @@ struct Node
 	Node* pNext;
 };
 
-
 class List
 {
 private:
@@ -79,7 +78,7 @@ public:
 
 	}
 
-	Monom GetByIndex(int index)
+	Monom& GetByIndex(int index)
 	{
 		if (index >= countElem)
 			throw string("Попытка получить не существующий элемент");
@@ -123,6 +122,7 @@ public:
 		Node* temp = pFirst->pNext;
 		delete pFirst;
 		pFirst = temp;
+		countElem--;
 	}
 
 	void DeleteEnd()
@@ -130,11 +130,12 @@ public:
 		if (pLast == nullptr)
 			throw string("Попытка удалить не существующий элемент");
 		Node* p;
-		for (p = pFirst; p != pLast; p = p->pNext)
+		for (p = pFirst; p->pNext != pLast; p = p->pNext)
 			;
 		p->pNext = nullptr;
 		delete pLast;
 		pLast = p;
+		countElem--;
 	}
 
 	void DeleteByIndex(int index)
@@ -156,10 +157,11 @@ public:
 				;
 			prev->pNext = p->pNext;
 			delete p;
+			countElem--;
 		}
 	}
 
-	friend void swap(List& first, List& second);
+	inline friend void Swap(List& first, List& second);
 
 	List& operator=(const List& anotherList)
 	{
@@ -168,15 +170,38 @@ public:
 		else
 		{
 			List temp(anotherList);
-			swap(*this, temp);
+			Swap(*this, temp);
 		}
+	}
+
+	bool operator==(const List& anotherList) const
+	{
+		if (countElem != anotherList.countElem)
+			return false;
+		if (pFirst == nullptr && anotherList.pFirst == nullptr)
+			return true;
+		Node* p;
+		Node* a;
+		for (p = pFirst, a=anotherList.pFirst; p != nullptr; p = p->pNext, a = a->pNext)
+		{
+			if (p->monom != a->monom)
+				return false;
+		}
+		return true;
+	}
+
+	bool operator !=(const List& anotherList) const
+	{
+		return !(*this == anotherList);
 	}
 };
 
-void swap(List& first, List& second)
+void Swap(List& first, List& second)
 {
 	std::swap(first.pFirst, second.pFirst);
 	std::swap(first.pLast, second.pLast);
 	std::swap(first.countElem, second.countElem);
 }
+
+
 

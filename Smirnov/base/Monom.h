@@ -8,12 +8,24 @@ class Monom
 private:
 	double coef;
 	int pow;
-	bool isDigit(const char& str)
+	bool IsDigit(const char& str)
 	{
 		if (str == '\0' ||str > '9' || str < '0')
 			return false;
 		else
 			return true;
+	}
+	bool IsOverFlow(int pow1, int pow2)
+	{
+		if (pow1 + pow2 > 999)
+			return true;
+		if ((pow1 % 10 + pow2 % 10) >= 10)
+			return true;
+		pow1 /= 10;
+		pow2 /= 10;
+		if ((pow1 % 10 + pow2 % 10) >= 10)
+			return true;
+		return false;
 	}
 public:
 	Monom(double _coef = 0, int _pow = 0) : coef(_coef)
@@ -38,7 +50,7 @@ public:
 	{
 		string resultStr = "";
 		int countDigits = 0;
-		while (isDigit(str[++startIndex]))
+		while (IsDigit(str[++startIndex]))
 		{
 			resultStr += str[startIndex];
 			countDigits++;
@@ -50,7 +62,7 @@ public:
 			throw string("ќтрицательна€ степень");
 		else if(countDigits == 0)
 			resultStr = "1";
-		return stod(resultStr);
+		return int(stod(resultStr));
 	}
 
 	void StrToMonom(const string& str, double& _coef, int& _pow)
@@ -102,14 +114,26 @@ public:
 			throw string("Ќевозможно сложить мономы с разными степен€ми");
 		}
 	}
+	Monom operator-(const Monom& secondOperand)
+	{
+		if (pow == secondOperand.pow)
+		{
+			Monom result(coef - secondOperand.coef, pow);
+			return result;
+		}
+		else
+		{
+			throw string("Ќевозможно вычесть мономы с разными степен€ми");
+
+		}
+	}
 	Monom operator*(const Monom& secondOperand)
 	{
-		int resultPow = pow + secondOperand.pow;
-		if (resultPow > 999)
+		if (IsOverFlow(pow, secondOperand.pow))
 			throw string("ѕри умножении мономов получилась степень, превышающа€ максимально допустимую");
 		else
 		{
-			Monom result(coef * secondOperand.coef, resultPow);
+			Monom result(coef * secondOperand.coef, pow + secondOperand.pow);
 			return result;
 		}
 	}
@@ -120,6 +144,10 @@ public:
 			return true;
 		else
 			return false;
+	}
+	bool operator!=(const Monom& secondOperand) const
+	{
+		return !(*this == secondOperand);
 	}
 };
 
