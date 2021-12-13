@@ -24,7 +24,10 @@ int main()
 	{
 		cout << str;
 	}
-		
+	/*Polynom p;
+	cin >> p;
+	p.BringingSimilarMembers();
+	cout << p;*/
 
 }
 

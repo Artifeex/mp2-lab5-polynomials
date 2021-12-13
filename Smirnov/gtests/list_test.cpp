@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "../base/List.h"
-
+#include "../base/List.cpp"
 TEST(list_test, can_create_list)
 {
 	EXPECT_NO_THROW(List l);

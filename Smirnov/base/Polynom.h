@@ -18,8 +18,6 @@ public:
 		copyStr.erase(remove_if(copyStr.begin(), copyStr.end(), isspace), copyStr.end());
 		int startIndex = 0;
 		int endIndex = 0;
-		bool isStarted = false;
-		bool isClosed = false;
 		int i = 0;
 		for (i = 0; i < copyStr.size(); i++)
 		{
@@ -36,78 +34,17 @@ public:
 		string lastMonom = copyStr.substr(startIndex, copyStr.size());
 		monoms.InsertEnd(Monom(lastMonom));
 	}
+	void BringingSimilarMembers();
+	void SortByDegrees();
+	void AddMonom(const Monom& monom);
+	
+	Polynom operator+(const Polynom& other);
+	Polynom operator*(const Polynom& other);
 
-	void BringingSimilarMembers()
-	{
-		for (size_t i = 0; i < monoms.GetCountElem(); i++)
-		{
-			for (size_t j = i + 1; j < monoms.GetCountElem(); j++)
-			{
-				Monom& m1 = monoms.GetByIndex(i);
-				Monom& m2 = monoms.GetByIndex(j);
-				if (m1.GetPow() == m2.GetPow())
-				{
-					m1 = m1 + m2;
-					monoms.DeleteByIndex(j);
-				}
-			}
-		}
-
-		for (size_t i = 0; i < monoms.GetCountElem(); i++)
-		{
-			if (monoms.GetForRead(i).GetCoef() == 0)
-			{
-				monoms.DeleteByIndex(i);
-				i = i - 1;
-			}
-		}
-	}
-
-	void SortByPows()
-	{
-		monoms.Sort();
-	}
-
-	void AddMonom(const Monom& monom)
-	{
-		monoms.InsertEnd(monom);
-	}
-
-	bool operator==(const Polynom& other) const
-	{
-		return monoms == other.monoms;
-	}
-
-	Polynom operator+(Polynom& other)
-	{
-		Polynom result(*this);
-		for (size_t i = 0; i < other.monoms.GetCountElem(); i++)
-		{
-			result.AddMonom(other.monoms.GetByIndex(i));
-		}
-		result.BringingSimilarMembers();
-		if (result.monoms.GetCountElem() == 0)
-			return Polynom("0");
-		result.SortByPows();
-		return result;
-	}
+	bool operator==(const Polynom& other) const;
 
 	inline friend ostream& operator<<(ostream& out,const Polynom& polynom);
-
-	Polynom operator*(Polynom& other)
-	{
-		Polynom result;
-		for (size_t i = 0; i < monoms.GetCountElem(); i++)
-		{
-			for (size_t j = 0; j < other.monoms.GetCountElem(); j++)
-			{
-				result.AddMonom(monoms.GetByIndex(i) * other.monoms.GetByIndex(j));
-			}
-		}
-		result.BringingSimilarMembers();
-		result.SortByPows();
-		return result;
-	}
+	inline friend istream& operator>>(istream& in, Polynom& polynom);
 };
 
 ostream& operator<<(ostream& out,const Polynom& polynom)
@@ -117,5 +54,14 @@ ostream& operator<<(ostream& out,const Polynom& polynom)
 		out << polynom.monoms.GetForRead(i);
 	}
 	return out;
+}
+
+istream& operator>>(istream& in, Polynom& polynom)
+{
+	string strPolynom;
+	getline(in, strPolynom);
+	Polynom result(strPolynom);
+	polynom = result;
+	return in;
 }
 

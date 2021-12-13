@@ -1,7 +1,7 @@
 #pragma once
 #include "pch.h"
 #include "../base/Polynom.h"
-
+#include "../base/Polynom.cpp"
 TEST(polynom_test, can_create_polynom)
 {
 	EXPECT_NO_THROW(Polynom p());
@@ -56,7 +56,7 @@ TEST(polynom_test, can_sort_polynoms)
 	string str = "yz + 3x2y4z5 - 5x4";
 	string result = "-5x4 + 3x2y4z5 + yz";
 	Polynom p1(str);
-	p1.SortByPows();
+	p1.SortByDegrees();
 	Polynom p2(result);
 
 	EXPECT_EQ(p1, p2);
@@ -70,7 +70,7 @@ TEST(polynom_test, can_add_polynoms)
 	Polynom p1(str1);
 	Polynom p2(str2);
 	Polynom p(result);
-	p.SortByPows();
+	p.SortByDegrees();
 
 	EXPECT_EQ(p, p1 + p2);
 }
@@ -83,7 +83,7 @@ TEST(polynom_test, can_add_polynoms_1)
 	Polynom p1(str1);
 	Polynom p2(str2);
 	Polynom p(result);
-	p.SortByPows();
+	p.SortByDegrees();
 
 	EXPECT_EQ(p, p1 + p2);
 }
@@ -96,7 +96,7 @@ TEST(polynom_test, can_multiply_polynoms)
 	Polynom p1(str1);
 	Polynom p2(str2);
 	Polynom p(result);
-	p.SortByPows();
+	p.SortByDegrees();
 
 	EXPECT_EQ(p, p1 * p2);
 }
