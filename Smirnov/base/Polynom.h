@@ -1,6 +1,7 @@
 #pragma once
 #include "List.h"
 #include <string>
+#include <iostream>
 using namespace std;
 
 class Polynom
@@ -51,11 +52,20 @@ public:
 				}
 			}
 		}
+
+		for (size_t i = 0; i < monoms.GetCountElem(); i++)
+		{
+			if (monoms.GetForRead(i).GetCoef() == 0)
+			{
+				monoms.DeleteByIndex(i);
+				i = i - 1;
+			}
+		}
 	}
 
 	void SortByPows()
 	{
-
+		monoms.Sort();
 	}
 
 	void AddMonom(const Monom& monom)
@@ -67,5 +77,45 @@ public:
 	{
 		return monoms == other.monoms;
 	}
+
+	Polynom operator+(Polynom& other)
+	{
+		Polynom result(*this);
+		for (size_t i = 0; i < other.monoms.GetCountElem(); i++)
+		{
+			result.AddMonom(other.monoms.GetByIndex(i));
+		}
+		result.BringingSimilarMembers();
+		if (result.monoms.GetCountElem() == 0)
+			return Polynom("0");
+		result.SortByPows();
+		return result;
+	}
+
+	inline friend ostream& operator<<(ostream& out,const Polynom& polynom);
+
+	Polynom operator*(Polynom& other)
+	{
+		Polynom result;
+		for (size_t i = 0; i < monoms.GetCountElem(); i++)
+		{
+			for (size_t j = 0; j < other.monoms.GetCountElem(); j++)
+			{
+				result.AddMonom(monoms.GetByIndex(i) * other.monoms.GetByIndex(j));
+			}
+		}
+		result.BringingSimilarMembers();
+		result.SortByPows();
+		return result;
+	}
 };
+
+ostream& operator<<(ostream& out,const Polynom& polynom)
+{
+	for (size_t i = 0; i < polynom.monoms.GetCountElem(); i++)
+	{
+		out << polynom.monoms.GetForRead(i);
+	}
+	return out;
+}
 

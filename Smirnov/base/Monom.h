@@ -1,5 +1,7 @@
 #pragma once
 #include <string>
+#include <iostream>
+#include <cmath>
 const int MaxPow = 999;
 using namespace std;
 
@@ -80,6 +82,10 @@ public:
 		}
 		if (coefStr == "")
 			coef = 1;
+		else if (coefStr == "-")
+			coef = -1;
+		else if (coefStr == "+")
+			coef = 1;
 		else
 			coef = stod(coefStr);
 		for (i; i < str.size(); i++)
@@ -97,6 +103,31 @@ public:
 				pow += GetPow(str, i);
 			}
 		}
+	}
+
+inline	friend ostream& operator<<(std::ostream& out, const Monom& monom);
+
+	string MonomToStr()
+	{
+		string result;
+		int copyPow = pow;
+		result = round(coef * 100) / 100;
+		int xPow = pow / 100;
+		int zPow = pow % 10;
+		int yPow = pow - xPow * 100 - zPow * 100;
+		if (xPow == 0)
+			result += "x";
+		else
+			result += "x" + to_string(xPow);
+		if (yPow == 0)
+			result += "y";
+		else
+			result += "y" + to_string(yPow);
+		if (zPow == 0)
+			result += "z";
+		else
+			result += "z" + to_string(zPow);
+		return result;
 	}
 
 	int GetPow() { return pow; }
@@ -138,6 +169,19 @@ public:
 		}
 	}
 
+	bool operator<(const Monom& secondOperand) const
+	{
+		if (pow < secondOperand.pow)
+			return true;
+		else
+			return false;
+	}
+
+	bool operator>(const Monom& secondOperand) const
+	{
+		return !(*this < secondOperand);
+	}
+
 	bool operator==(const Monom& secondOperand) const
 	{
 		if (coef == secondOperand.coef && pow == secondOperand.pow)
@@ -151,3 +195,38 @@ public:
 	}
 };
 
+ostream& operator<<(ostream& out, const Monom& monom)
+{
+	string result;
+	string sign;
+	if (monom.coef > 0)
+		sign = "+";
+	int xPow = monom.pow / 100;
+	int zPow = monom.pow % 10;
+	int yPow = (monom.pow - xPow * 100 - zPow) / 10;
+	if (xPow == 0)
+		result += "";
+	else if (xPow == 1)
+		result += "x";
+	else
+		result += "x" + to_string(xPow);
+	if (yPow == 0)
+		result += "";
+	else if (yPow == 1)
+		result += "y";
+	else
+		result += "y" + to_string(yPow);
+	if (zPow == 0)
+		result += "";
+	else if (zPow == 1)
+		result += "z";
+	else
+		result += "z" + to_string(zPow);
+	if (monom.coef == 1)
+	{
+		out << sign << result;
+		return out;
+	}	
+	out << sign << round(monom.coef * 100) / 100 << result;
+	return out;
+}

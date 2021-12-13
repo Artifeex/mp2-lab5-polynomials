@@ -46,6 +46,14 @@ TEST(monom_test, throws_when_pow_is_too_big_by_string)
 	ASSERT_ANY_THROW(Monom m(str));
 }
 
+TEST(monom_test, can_convert_monom_to_string)
+{
+	string str = "3x2y3z4";
+	Monom m(str);
+	
+	EXPECT_EQ(str, m.MonomToStr());
+}
+
 TEST(monom_test, can_create_monom_without_one_argument)
 {
 	string str = "3x2z3";

@@ -2,10 +2,30 @@
 //
 
 #include <iostream>
-
+#include "Polynom.h"
+using namespace std;
 int main()
 {
-    std::cout << "Hello World!\n";
+	setlocale(LC_ALL, "ru");
+	try 
+	{
+		cout << "Введите первый полином" << endl;
+		string str1 = "";
+		string str2 = "";
+		getline(cin, str1);
+		cout << "Введите второй полином" << endl;
+		getline(cin, str2);
+		Polynom p1(str1);
+		Polynom p2(str2);
+		cout << "сумма:" << p1 + p2 << endl;
+		cout << "произведение:" << p1 * p2 << endl;
+	}
+	catch (string str)
+	{
+		cout << str;
+	}
+		
+
 }
 
 // Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"

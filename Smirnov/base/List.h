@@ -19,7 +19,7 @@ public:
 	List(const List& list):pFirst(nullptr), pLast(nullptr), countElem(0)
 	{
 		Node* p = list.pFirst;
-		while (p->pNext != nullptr)
+		while (p != nullptr)
 		{
 			InsertEnd(p->monom);
 			p = p->pNext;
@@ -33,6 +33,8 @@ public:
 			InsertEnd(monoms[i]);
 		}
 	}
+
+	int GetCountElem() const { return countElem; }
 
 	void InsertEnd(Monom monom)
 	{
@@ -50,6 +52,30 @@ public:
 		}
 	}
 
+	void Sort()
+	{
+		List temp(*this);
+		List result;
+		while (temp.countElem != 1)
+		{
+			Monom max = temp.GetByIndex(0);
+			int maxIndex = 0;
+			for (size_t j = 1; j < temp.countElem; j++)
+			{
+				if (max < temp.GetByIndex(j))
+				{
+					max = temp.GetByIndex(j);
+					maxIndex = j;
+				}
+
+			}
+			result.InsertEnd(max);
+			temp.DeleteByIndex(maxIndex);
+		}
+		result.InsertEnd(temp.GetByIndex(0));
+		*this = result;
+	}
+	
 	void InsertByIndex(int index, Monom monom)
 	{
 		if (index > countElem)
@@ -76,6 +102,21 @@ public:
 			countElem++;
 		}
 
+	}
+
+	Monom GetForRead(int index) const
+	{
+		if(index >= countElem)
+			throw string("Попытка получить не существующий элемент");
+		else if (index < 0)
+		throw string("Индекс меньше нуля");
+		if (index == countElem - 1)
+			return pLast->monom;
+		Node* p = pFirst;
+		int i = 0;
+		for (p; i != index; p = p->pNext, i++)
+			;
+		return p->monom;
 	}
 
 	Monom& GetByIndex(int index)
@@ -151,7 +192,7 @@ public:
 		else
 		{
 			Node* p;
-			Node* prev;
+			Node* prev = nullptr;
 			int i = 0;
 			for (p = pFirst; i != index; prev = p, p = p->pNext,i++)
 				;
@@ -171,6 +212,7 @@ public:
 		{
 			List temp(anotherList);
 			Swap(*this, temp);
+			return *this;
 		}
 	}
 

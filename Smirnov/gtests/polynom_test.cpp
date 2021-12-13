@@ -50,3 +50,53 @@ TEST(polynom_test, can_bringing_similar_members)
 
 	EXPECT_EQ(p1, p2);
 }
+
+TEST(polynom_test, can_sort_polynoms)
+{
+	string str = "yz + 3x2y4z5 - 5x4";
+	string result = "-5x4 + 3x2y4z5 + yz";
+	Polynom p1(str);
+	p1.SortByPows();
+	Polynom p2(result);
+
+	EXPECT_EQ(p1, p2);
+}
+
+TEST(polynom_test, can_add_polynoms)
+{
+	string str1 = "yz + 3x2y4z5 - 5x4";
+	string str2 = "yz + 3x2y4z5 - 5x4";
+	string result = "2yz + 6x2y4z5 - 10x4";
+	Polynom p1(str1);
+	Polynom p2(str2);
+	Polynom p(result);
+	p.SortByPows();
+
+	EXPECT_EQ(p, p1 + p2);
+}
+
+TEST(polynom_test, can_add_polynoms_1)
+{
+	string str1 = "7 + 2x3y + 3x2y4z5 - 5x4";
+	string str2 = "yz - 5x4 + 3x2y4z5  - 1";
+	string result = "yz + 6x2y4z5 - 10x4 + 2x3y + 6";
+	Polynom p1(str1);
+	Polynom p2(str2);
+	Polynom p(result);
+	p.SortByPows();
+
+	EXPECT_EQ(p, p1 + p2);
+}
+
+TEST(polynom_test, can_multiply_polynoms)
+{
+	string str1 = "3 + 2x4y2z3";
+	string str2 = "xy - 3x2y2z2";
+	string result = "3xy - 9x2y2z2 + 2x5y3z3 -6x6y4z5";
+	Polynom p1(str1);
+	Polynom p2(str2);
+	Polynom p(result);
+	p.SortByPows();
+
+	EXPECT_EQ(p, p1 * p2);
+}
