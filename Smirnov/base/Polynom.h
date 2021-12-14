@@ -44,10 +44,12 @@ public:
 		BringingSimilarMembers();
 		SortByDegrees();
 	}
+	bool IsEmpty();
 	void BringingSimilarMembers();
 	void SortByDegrees();
 	void AppendMonom(const Monom& monom);
 	double CalculateInPoint(double x, double y, double z);
+	Polynom Derivative(Arguments arg);
 
 	Polynom operator+(const Polynom& other);
 	Polynom operator-(const Polynom& other);

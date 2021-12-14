@@ -214,6 +214,39 @@ TEST(monom_test, can_create_monom_with_double_coef)
 	EXPECT_NO_THROW(Monom(str1));
 }
 
+TEST(monom_test, can_do_derivative_z)
+{
+	string str1 = "5xz3";
+	string str2 = "15xz2";
+	Monom m1(str1);
+	Monom result = m1.Derivative(z);
+	Monom m2(str2);
+
+	EXPECT_EQ(result, m2);
+}
+
+TEST(monom_test, can_do_derivative_x)
+{
+	string str1 = "-z2x6y2";
+	string str2 = "-6z2x5y2";
+	Monom m1(str1);
+	Monom result = m1.Derivative(x);
+	Monom m2(str2);
+
+	EXPECT_EQ(result, m2);
+}
+
+TEST(monom_test, can_do_derivative_with_no_arguments)
+{
+	string str1 = "7";
+	string str2 = "0";
+	Monom m1(str1);
+	Monom result = m1.Derivative(x);
+	Monom m2(str2);
+
+	EXPECT_EQ(result, m2);
+}
+
 
 
 

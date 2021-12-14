@@ -1,5 +1,5 @@
 +x6-4x3+xyz-1
-+4x3-2xyz+y7
++4x3-2xyz+y3
 +4x9-2x7yz+x6y7-16x6+12x4yz-4x3y7-4x3-2x2y2z2+xy8z+2xyz-y7
-+x6-xyz+y7-1
-+x6-8x3+3xyz-y7-1
++x3-7xyz+y4-1
++x2-8x3+3xyz-y7-1

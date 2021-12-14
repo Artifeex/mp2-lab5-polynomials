@@ -1,9 +1,13 @@
 #include "Manager.h"
 
-void Manager::AppendPolynom(const string strPolynom)
+void Manager::AppendPolynom(const string& strPolynom)
 {
 	Polynom p(strPolynom);
-	polymoms.push_back(p);
+	if (p.IsEmpty())
+	{
+		return;
+	}
+	polynoms.push_back(p);
 	countPolynoms++;
 }
 
@@ -13,7 +17,7 @@ Polynom Manager::GetPolynomForRead(int index)
 		throw string("Слишком большой индекс");
 	else if (index < 0)
 		throw string("Слишком маленький индекс");
-	return polymoms[index];
+	return polynoms[index];
 }
 
 Polynom& Manager::GetPolynom(int index)
@@ -22,7 +26,7 @@ Polynom& Manager::GetPolynom(int index)
 		throw string("Слишком большой индекс");
 	else if (index < 0)
 		throw string("Слишком маленький индекс");
-	return polymoms[index];
+	return polynoms[index];
 }
 
 void Manager::SaveInFile()
@@ -35,7 +39,7 @@ void Manager::SaveInFile()
 		int i = 0;
 		while (i < countPolynoms)
 		{
-			outf << polymoms[i] << endl;
+			outf << polynoms[i] << endl;
 			i++;
 		}
 	}
@@ -53,7 +57,7 @@ int Manager::GetCountPolynoms()
 
 void Manager::AppendPolynom(const Polynom& p)
 {
-	polymoms.push_back(p);
+	polynoms.push_back(p);
 	countPolynoms++;
 }
 
@@ -71,7 +75,7 @@ void Manager::GetFromFile()
 			if (strPolynom == "")
 				continue;
 			Polynom p(strPolynom);
-			polymoms.push_back(p);
+			polynoms.push_back(p);
 			countPolynoms++;
 		}
 		inf.close();
@@ -82,11 +86,20 @@ void Manager::GetFromFile()
 	}
 }
 
+Polynom Manager::Derivative(Arguments arg, int index)
+{
+	if (index >= countPolynoms)
+		throw string("Слишком большой индекс");
+	else if (index < 0)
+		throw string("Слишком маленький индекс");
+	return polynoms[index].Derivative(arg);
+}
+
 void Manager::PrintConsole()
 {
-	for (size_t i = 0; i < polymoms.size(); i++)
+	for (size_t i = 0; i < polynoms.size(); i++)
 	{
-		cout << i << ": " << polymoms[i] << endl;
+		cout << i << ": " << polynoms[i] << endl;
 	}
 }
 
@@ -96,7 +109,7 @@ double Manager::CalculateInPoint(double x, double y, double z, int index)
 		throw string("Слишком большой индекс");
 	else if (index < 0)
 		throw string("Слишком маленький индекс");
-	return polymoms[index].CalculateInPoint(x, y, z);
+	return polynoms[index].CalculateInPoint(x, y, z);
 }
 
 void Manager::DeletePolynom(int index)
@@ -105,7 +118,7 @@ void Manager::DeletePolynom(int index)
 		throw string("Слишком большой индекс");
 	else if (index < 0)
 		throw string("Слишком маленький индекс");
-	polymoms.erase(polymoms.begin() + index);
+	polynoms.erase(polynoms.begin() + index);
 	countPolynoms--;
 }
 
@@ -119,6 +132,6 @@ bool Manager::IsEmpty()
 
 void Manager::Clear()
 {
-	polymoms.clear();
+	polynoms.clear();
 	countPolynoms = 0;
 }

@@ -149,3 +149,14 @@ TEST(polynom_test, can_create_polynom_with_double_coef)
 
 	EXPECT_NO_THROW(Polynom(str));
 }
+
+TEST(polynom_test, can_do_derivative)
+{
+	string str1 = "yz + 3x2y4z5 - 5x4 + x";
+	string str2 = "z + 12x2y3z5";
+	Polynom m1(str1);
+	Polynom result(str2);
+	Polynom m2 = m1.Derivative(y);
+	
+	EXPECT_EQ(result, m2);
+}

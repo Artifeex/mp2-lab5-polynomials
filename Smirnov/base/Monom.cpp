@@ -54,13 +54,13 @@ void Monom::StrToMonom(const string& str, double& _coef, int& _pow)
 		}
 	}
 	if (coefStr == "")
-		coef = 1;
+		_coef = 1;
 	else if (coefStr == "-")
-		coef = -1;
+		_coef = -1;
 	else if (coefStr == "+")
-		coef = 1;
+		_coef = 1;
 	else
-		coef = stod(coefStr);
+		_coef = stod(coefStr);
 	for (i; i < str.size(); i++)
 	{
 		if (str[i] == 'x')
@@ -82,8 +82,51 @@ double Monom::CalculateInPoint(double x, double y, double z)
 {
 	int xDegree = degree / 100;
 	int zDegree = degree % 10;
-	int yDegree = (degree % 100 - zDegree) / 10;
+	int yDegree = (degree % 100) / 10;
 	double result = coef * pow(x, xDegree) * pow(y, yDegree) * pow(z, zDegree);
+	return result;
+}
+
+Monom Monom::Derivative(Arguments arg)
+{
+	int _degree = degree;
+	double _coef = coef;
+	int zDegree = degree % 10;
+	int yDegree = (degree % 100) / 10;
+	int xDegree = _degree / 100;
+	if (_degree == 0)
+		_coef = 0;
+	switch (arg)
+	{
+	case x:
+		if (xDegree == 0)
+		{
+			_coef = 0;
+			break;
+		}
+		_coef *= xDegree;
+		_degree -= 100;
+		break;
+	case y:
+		if (yDegree == 0)
+		{
+			_coef = 0;
+			break;
+		}
+		_coef *= yDegree;
+		_degree -= 10;
+		break;
+	case z:
+		if (zDegree == 0)
+		{
+			_coef = 0;
+			break;
+		}
+		_coef *= zDegree;
+		_degree -= 1;
+		break;
+	}
+	Monom result(_coef, _degree);
 	return result;
 }
 

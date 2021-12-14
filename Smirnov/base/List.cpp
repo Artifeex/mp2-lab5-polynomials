@@ -18,8 +18,11 @@ void List::InsertEnd(Monom monom)
 
 void List::Sort()
 {
+	if (this->IsEmpty())
+		return;
 	List temp(*this);
 	List result;
+	
 	while (temp.countElem != 1)
 	{
 		Monom max = temp.GetByIndex(0);

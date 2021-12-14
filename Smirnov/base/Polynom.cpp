@@ -1,5 +1,13 @@
 #include "Polynom.h"
 
+bool Polynom::IsEmpty()
+{
+	if (monoms.IsEmpty())
+		return true;
+	else
+		return false;
+}
+
 void Polynom::BringingSimilarMembers()
 {
 	for (size_t i = 0; i < monoms.GetCountElem(); i++)
@@ -42,6 +50,16 @@ double Polynom::CalculateInPoint(double x, double y, double z)
 	for (size_t i = 0; i < monoms.GetCountElem(); i++)
 	{
 		result += monoms.GetForRead(i).CalculateInPoint(x, y, z);
+	}
+	return result;
+}
+
+Polynom Polynom::Derivative(Arguments arg)
+{
+	Polynom result;
+	for (size_t i = 0; i < monoms.GetCountElem(); i++)
+	{
+		result.AppendMonom(monoms.GetForRead(i).Derivative(arg));
 	}
 	return result;
 }

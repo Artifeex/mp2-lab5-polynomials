@@ -4,13 +4,19 @@
 #include <cmath>
 const int MaxDegree = 999;
 using namespace std;
+enum Arguments
+{
+	x = 1,
+	y = 2,
+	z = 3
+};
 
 class Monom
 {
 private:
 	double coef;
 	int degree;
-
+	void StrToMonom(const string& str, double& _coef, int& _pow);
 	bool IsDigit(const char& str);
 	bool IsOverFlow(int degree1, int degree2);
 public:
@@ -31,10 +37,10 @@ public:
 			throw string("Степень меньше нуля");
 	}
 	int GetDegreeStr(const string& str, int& startIndex);
-	void StrToMonom(const string& str, double& _coef, int& _pow);
 	int GetDegree() { return degree; }
 	double GetCoef() { return coef; }
 	double CalculateInPoint(double x, double y, double z);
+	Monom Derivative(Arguments arg);
 
 	Monom operator+(const Monom& secondOperand);
 	Monom operator-(const Monom& secondOperand);
