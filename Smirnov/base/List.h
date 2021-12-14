@@ -25,7 +25,6 @@ public:
 			p = p->pNext;
 		}
 	}
-
 	List(const vector<Monom>& monoms): pFirst(nullptr), pLast(nullptr), countElem(0)
 	{
 		for (size_t i = 0; i < monoms.size(); i++)
@@ -33,7 +32,6 @@ public:
 			InsertEnd(monoms[i]);
 		}
 	}
-
 	int GetCountElem() const { return countElem; }
 	Monom GetForRead(int index) const;
 	Monom& GetByIndex(int index);

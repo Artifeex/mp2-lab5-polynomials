@@ -31,20 +31,6 @@ TEST(list_test, can_copy_list)
 	EXPECT_NO_THROW(List copy(l));
 }
 
-TEST(list_test, copy_list_have_own_mem) //спорно
-{
-	vector<Monom> monoms;
-	const int size = 7;
-	for (size_t i = 0; i < size; i++)
-	{
-		monoms.push_back(Monom(i, i));
-	}
-	List l(monoms);
-	List copy(l);
-
-	EXPECT_EQ(true, &copy != &l); 
-}
-
 TEST(list_test, can_assign_list)
 {
 	vector<Monom> monoms;

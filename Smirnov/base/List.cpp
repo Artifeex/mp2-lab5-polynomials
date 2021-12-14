@@ -24,7 +24,7 @@ void List::Sort()
 	{
 		Monom max = temp.GetByIndex(0);
 		int maxIndex = 0;
-		for (size_t j = 1; j < temp.countElem; j++)
+		for (int j = 1; j < temp.countElem; j++)
 		{
 			if (max < temp.GetByIndex(j))
 			{

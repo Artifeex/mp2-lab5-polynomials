@@ -22,7 +22,6 @@ public:
 			throw string("Степень меньше нуля");
 		degree = _degree;
 	}
-
 	Monom(const string& str) :coef(0), degree(0)
 	{
 		StrToMonom(str, coef, degree);
@@ -31,7 +30,6 @@ public:
 		else if (degree < 0)
 			throw string("Степень меньше нуля");
 	}
-
 	int GetDegreeStr(const string& str, int& startIndex);
 	void StrToMonom(const string& str, double& _coef, int& _pow);
 	int GetDegree() { return degree; }
@@ -41,6 +39,7 @@ public:
 	Monom operator+(const Monom& secondOperand);
 	Monom operator-(const Monom& secondOperand);
 	Monom operator*(const Monom& secondOperand);
+	Monom operator-() const;
 	
 	bool operator<(const Monom& secondOperand) const;
 	bool operator>(const Monom& secondOperand) const;
@@ -57,6 +56,8 @@ ostream& operator<<(ostream& out, const Monom& monom)
 	string sign;
 	if (monom.coef > 0)
 		sign = "+";
+	else if (monom.coef < 0)
+		sign = "-";
 	int xDegree = monom.degree / 100;
 	int zDegree = monom.degree % 10;
 	int yDegree = (monom.degree % 100 - zDegree) / 10;
@@ -78,12 +79,17 @@ ostream& operator<<(ostream& out, const Monom& monom)
 		result += "z";
 	else
 		result += "z" + to_string(zDegree);
-	if (monom.coef == 1)
+	if (monom.coef == 1 && result != "")
 	{
 		out << sign << result;
 		return out;
 	}	
-	out << sign << round(monom.coef * 100) / 100 << result;
+	else if (monom.coef == -1 && result != "")
+	{
+		out << sign << result;
+		return out;
+	}
+	out << sign << abs(round(monom.coef * 100) / 100) << result;
 	return out;
 }
 

@@ -7,7 +7,7 @@ TEST(polynom_test, can_create_polynom)
 	EXPECT_NO_THROW(Polynom p());
 }
 
-TEST(polynom_test, can_create_polynom_use_list_monoms)
+TEST(polynom_test, can_create_polynom_use_vector_monoms)
 {
 	vector<Monom> monoms;
 	const int size = 7;
@@ -22,20 +22,47 @@ TEST(polynom_test, can_create_polynom_use_list_monoms)
 
 TEST(polynom_test, can_create_polynom_use_string)
 {
-	string str = "3x2y4z5 + 6x4y4z4";
+	string strPolynom = "3x2y4z5 + 6x4y4z4";
 	
-	EXPECT_NO_THROW(Polynom p(str));
+	EXPECT_NO_THROW(Polynom p(strPolynom));
+}
+
+TEST(polynom_test, can_create_polynom_use_polynom)
+{
+	string strPolynom = "3x2 - y4 + x5";
+	Polynom p1(strPolynom);
+	Polynom p2(p1);
+	
+	EXPECT_EQ(p1, p2);
+}
+
+TEST(polynom_test, can_assign_polynoms)
+{
+	string strPolynom = "3x2 - y4 + x5";
+	Polynom p1(strPolynom);
+	Polynom p2 = p1;
+
+	EXPECT_EQ(p2, p1);
+}
+
+TEST(polynom_test, can_append_monom)
+{
+	string monomStr = "3x5y4";
+	Monom m(monomStr);
+	Polynom polynom;
+
+	EXPECT_NO_THROW(polynom.AppendMonom(m));
 }
 
 TEST(polynom_test, create_polynom_use_string_right_work)
 {
 	string str = "-3x2y4z5 + 6x4y4z4";
-	string str1 = "-3x2y4z5";
-	string str2 = "6x4y4z4";
+	string str1 = "6x4y4z4";
+	string str2 = "-3x2y4z5";
 	Polynom p1(str);
 	Polynom p2;
-	p2.AddMonom(Monom(str1));
-	p2.AddMonom(Monom(str2));
+	p2.AppendMonom(Monom(str1));
+	p2.AppendMonom(Monom(str2));
 
 	EXPECT_EQ(p1, p2);
 }
@@ -45,18 +72,16 @@ TEST(polynom_test, can_bringing_similar_members)
 	string str = "3x2y4z5 - 6x4y4z4 + 7x2y4z5";
 	string result = "10x2y4z5 -6x4y4z4";
 	Polynom p1(str);
-	p1.BringingSimilarMembers();
 	Polynom p2(result);
 
 	EXPECT_EQ(p1, p2);
 }
 
-TEST(polynom_test, can_sort_polynoms)
+TEST(polynom_test, can_sort_polynoms_by_degree)
 {
 	string str = "yz + 3x2y4z5 - 5x4";
 	string result = "-5x4 + 3x2y4z5 + yz";
 	Polynom p1(str);
-	p1.SortByDegrees();
 	Polynom p2(result);
 
 	EXPECT_EQ(p1, p2);
@@ -64,28 +89,24 @@ TEST(polynom_test, can_sort_polynoms)
 
 TEST(polynom_test, can_add_polynoms)
 {
-	string str1 = "yz + 3x2y4z5 - 5x4";
-	string str2 = "yz + 3x2y4z5 - 5x4";
-	string result = "2yz + 6x2y4z5 - 10x4";
+	string str1 = "yz + 3x2y4z5 - 5x4 +x";
+	string str2 = "yz + 3x2y4z5 - 5x4 - y";
+	string result = "2yz + 6x2y4z5 - 10x4 + x -y";
 	Polynom p1(str1);
 	Polynom p2(str2);
 	Polynom p(result);
-	p.SortByDegrees();
 
 	EXPECT_EQ(p, p1 + p2);
 }
 
-TEST(polynom_test, can_add_polynoms_1)
+TEST(polynom_test, can_sub_polynoms)
 {
-	string str1 = "7 + 2x3y + 3x2y4z5 - 5x4";
-	string str2 = "yz - 5x4 + 3x2y4z5  - 1";
-	string result = "yz + 6x2y4z5 - 10x4 + 2x3y + 6";
+	string str1 = "yz + 3x2y4z5 - 5x4 + x";
+	string str2 = "yz  - 2x4 - y + 3x2y4z5";
+	string result = " -3x4 + x + y";
 	Polynom p1(str1);
 	Polynom p2(str2);
 	Polynom p(result);
-	p.SortByDegrees();
-
-	EXPECT_EQ(p, p1 + p2);
 }
 
 TEST(polynom_test, can_multiply_polynoms)
@@ -96,7 +117,35 @@ TEST(polynom_test, can_multiply_polynoms)
 	Polynom p1(str1);
 	Polynom p2(str2);
 	Polynom p(result);
-	p.SortByDegrees();
 
 	EXPECT_EQ(p, p1 * p2);
+}
+
+TEST(polynom_test, throws_when_multiply_polynoms_with_overflow_degree)
+{
+	string str1 = "x7y2 + 10";
+	string str2 = "xyz - x3";
+	Polynom p1(str1);
+	Polynom p2(str2);
+
+	ASSERT_ANY_THROW(p1 * p2);
+}
+
+TEST(polynom_test, can_calculate_polynom_in_point)
+{
+	string str = "x3 - 3 + z2 - y";
+	double x = 2;
+	double y = 5;
+	double z = 1;
+	double result = 8 - 3 + 1 - 5;
+	Polynom p(str);
+
+	EXPECT_EQ(p.CalculateInPoint(x, y, z), result);
+}
+
+TEST(polynom_test, can_create_polynom_with_double_coef)
+{
+	string str = "-3,5x5 + 5";
+
+	EXPECT_NO_THROW(Polynom(str));
 }

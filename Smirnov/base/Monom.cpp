@@ -125,6 +125,12 @@ Monom Monom::operator*(const Monom& secondOperand)
 	}
 }
 
+Monom Monom::operator-() const
+{
+	return Monom(-this->coef, this->degree);
+	
+}
+
 bool Monom::operator<(const Monom& secondOperand) const
 {
 	if (degree < secondOperand.degree)

@@ -141,11 +141,13 @@
   <ItemGroup>
     <ClCompile Include="base.cpp" />
     <ClCompile Include="List.cpp" />
+    <ClCompile Include="Manager.cpp" />
     <ClCompile Include="Monom.cpp" />
     <ClCompile Include="Polynom.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="List.h" />
+    <ClInclude Include="Manager.h" />
     <ClInclude Include="Monom.h" />
     <ClInclude Include="Polynom.h" />
   </ItemGroup>

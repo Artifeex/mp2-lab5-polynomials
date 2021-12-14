@@ -10,20 +10,28 @@ private:
 	List monoms;
 public:
 	Polynom(){}
-	Polynom(const List& _monoms): monoms(_monoms){}
-	Polynom(const Polynom& _polynom): monoms(_polynom.monoms){}
+	Polynom(const List& _monoms): monoms(_monoms)
+	{ 
+		BringingSimilarMembers();
+		SortByDegrees();
+	}
+	Polynom(const Polynom& _polynom): monoms(_polynom.monoms)
+	{
+		BringingSimilarMembers();
+		SortByDegrees();
+	}
 	Polynom(const string& str)
 	{
 		string copyStr = str;
 		copyStr.erase(remove_if(copyStr.begin(), copyStr.end(), isspace), copyStr.end());
 		int startIndex = 0;
 		int endIndex = 0;
-		int i = 0;
+		size_t i = 0;
 		for (i = 0; i < copyStr.size(); i++)
 		{
 			if (copyStr[i] == '+' || copyStr[i] == '-')
 			{
-				if (i == 0)//если первый моном начался со знака
+				if (i == 0) 
 					continue;
 				endIndex = i-1;
 				string monom = copyStr.substr(startIndex, endIndex - startIndex + 1);
@@ -33,12 +41,16 @@ public:
 		}
 		string lastMonom = copyStr.substr(startIndex, copyStr.size());
 		monoms.InsertEnd(Monom(lastMonom));
+		BringingSimilarMembers();
+		SortByDegrees();
 	}
 	void BringingSimilarMembers();
 	void SortByDegrees();
-	void AddMonom(const Monom& monom);
-	
+	void AppendMonom(const Monom& monom);
+	double CalculateInPoint(double x, double y, double z);
+
 	Polynom operator+(const Polynom& other);
+	Polynom operator-(const Polynom& other);
 	Polynom operator*(const Polynom& other);
 
 	bool operator==(const Polynom& other) const;

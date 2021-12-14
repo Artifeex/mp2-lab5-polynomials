@@ -31,9 +31,19 @@ void Polynom::SortByDegrees()
 	monoms.Sort();
 }
 
-void Polynom::AddMonom(const Monom& monom)
+void Polynom::AppendMonom(const Monom& monom)
 {
 	monoms.InsertEnd(monom);
+}
+
+double Polynom::CalculateInPoint(double x, double y, double z)
+{
+	double result = 0;
+	for (size_t i = 0; i < monoms.GetCountElem(); i++)
+	{
+		result += monoms.GetForRead(i).CalculateInPoint(x, y, z);
+	}
+	return result;
 }
 
 bool Polynom::operator==(const Polynom& other) const
@@ -46,7 +56,21 @@ Polynom Polynom::operator+(const Polynom& other)
 	Polynom result(*this);
 	for (size_t i = 0; i < other.monoms.GetCountElem(); i++)
 	{
-		result.AddMonom(other.monoms.GetForRead(i));
+		result.AppendMonom(other.monoms.GetForRead(i));
+	}
+	result.BringingSimilarMembers();
+	if (result.monoms.GetCountElem() == 0)
+		return Polynom("0");
+	result.SortByDegrees();
+	return result;
+}
+
+Polynom Polynom::operator-(const Polynom& other)
+{
+	Polynom result(*this);
+	for (size_t i = 0; i < other.monoms.GetCountElem(); i++)
+	{
+		result.AppendMonom(-other.monoms.GetForRead(i));
 	}
 	result.BringingSimilarMembers();
 	if (result.monoms.GetCountElem() == 0)
@@ -62,7 +86,7 @@ Polynom Polynom::operator*(const Polynom& other)
 	{
 		for (size_t j = 0; j < other.monoms.GetCountElem(); j++)
 		{
-			result.AddMonom(monoms.GetByIndex(i) * other.monoms.GetForRead(j));
+			result.AppendMonom(monoms.GetByIndex(i) * other.monoms.GetForRead(j));
 		}
 	}
 	result.BringingSimilarMembers();
